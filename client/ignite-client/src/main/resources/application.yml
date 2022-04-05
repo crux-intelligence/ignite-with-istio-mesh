@@ -1,0 +1,24 @@
+server:
+  port: 9051
+spring:
+  cache:
+    type: jcache
+    jcache:
+      provider: org.apache.ignite.cache.CachingProvider
+      config: ${GRIDGAIN_CONFIG_PATH:classpath:cache/ignite-cache-local.xml}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,loggers
+  endpoint:
+    health:
+      show-details: always
+    loggers:
+      enabled: true
+
+springdoc:
+  api-docs:
+    path: /docs
+
