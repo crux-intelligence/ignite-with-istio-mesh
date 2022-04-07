@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: client-vs
+  namespace: default
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - default/backend-gateway
+  http:
+  - name: ignite-client
+    match:
+    - uri:
+        prefix: /
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: ignite-client-service
+        port:
+          number: {{ .Values.service.port }}

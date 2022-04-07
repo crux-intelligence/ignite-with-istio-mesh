@@ -1,0 +1,15 @@
+# Default values for client.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: sample-ignite-client
+  tag: 1.0.0-SNAPSHOT
+  pullPolicy: Always
+
+
+service:
+  type: ClusterIP
+  port: 8080
