@@ -1,0 +1,31 @@
+#image:
+#  cache: cuddle/cache:8.8.10
+#  pullPolicy: Always
+#
+#imagePullSecrets: dockersecret
+
+replicaCount:
+  cache: 2
+
+storageClass:
+  name: ignite
+  ignite_wal_size: 10Gi
+  ignite_work_size: 10Gi
+  ignite_swap_size: 10Gi
+
+service:
+  cache:
+    type: ClusterIP
+    port: 8080
+
+resources:
+  limits:
+      ignite:
+         memory: 7Gi
+
+#env:
+#  OOM_SLACK_URL: https://hooks.slack.com/services/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
+
+
+#nodeSelector:
+#  cache: {deployType: cruxapp}

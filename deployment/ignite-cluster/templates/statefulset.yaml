@@ -1,0 +1,125 @@
+# An example of a Kubernetes configuration for pod deployment.
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  # Cluster name.
+  name: ignite-cluster
+  namespace: ignite
+spec:
+  # The initial number of pods to be started by Kubernetes.
+  replicas: {{ .Values.replicaCount.ignite }}
+  serviceName: ignite
+  selector:
+    matchLabels:
+      app: ignite
+  template:
+    metadata:
+      labels:
+        app: ignite
+    spec:
+      serviceAccountName: ignite
+      terminationGracePeriodSeconds: 60000
+      imagePullSecrets: {}
+      nodeSelector: {}
+      containers:
+        # Custom pod name.
+        - name: ignite-node
+          image: gridgain/community:8.8.10
+          imagePullPolicy: Always
+          env:
+            - name: OPTION_LIBS
+              value: ignite-kubernetes,ignite-rest-http
+            - name: CONFIG_URI
+              value: file:///gridgain/config/node-configuration.xml
+            - name: JVM_OPTS
+              value: "-DIGNITE_QUIET=false -Xms4g -Xmx4g -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:+ScavengeBeforeFullGC -XX:+DisableExplicitGC"
+            - name: JAVA_OPTS
+              value: "-Djava.net.preferIPv4Stack=true"
+#            - name: OOM_SLACK_URL
+#              value: {{ .Values.env.OOM_SLACK_URL }}
+#            - name: APP_ENV
+#              value: {{ .Values.env.APP_ENV }}
+          ports:
+            # Ports to open.
+            - containerPort: 47100 # communication SPI port
+            - containerPort: 47500 # discovery SPI port
+            - containerPort: 49112 # JMX port
+            - containerPort: 10800 # thin clients/JDBC driver port
+            - containerPort: 8080 # REST API
+          volumeMounts:
+            - mountPath: /gridgain/config
+              name: config-vol
+            - mountPath: /gridgain/work
+              name: work-vol
+            - mountPath: /gridgain/wal
+              name: wal-vol
+            - mountPath: /gridgain/walarchive
+              name: wal-vol
+#            - mountPath: /gridgain/swapVol
+#              name: swap-vol
+          # UNCOMMENT below for readiness probe.
+          readinessProbe:
+            httpGet:
+              path: /ignite?cmd=probe
+              port: 8080
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            periodSeconds: 60
+            timeoutSeconds: 120
+          # UNCOMMENT below for liveness probe.
+          livenessProbe:
+            httpGet:
+              path: /ignite?cmd=version
+              port: 8080
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            periodSeconds: 60
+            timeoutSeconds: 120
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/bin/sh", "-c",'POD_NAME=$(hostname);export POD_NAME;tar_name=$POD_NAME"_"$(date +%Y-%m-%d)".tar.gz";export tar_name; tar -zcvf $tar_name /data/sift/logs/*;cp $tar_name /cuddle/data/logs/;curl -X POST --data-urlencode "payload={ \"attachments\": [{ \"title\": \" Pod Stopped \", \"color\": \"#F35A00\", \"attachment_type\": \"default\", \"fields\": [{ \"title\": \"Environment\", \"value\": \"${APP_ENV}\", \"short\": false }, { \"title\": \"Pod name\", \"value\": \"${POD_NAME}\", \"short\": false }, { \"title\": \"Log name\", \"value\": \"${tar_name}\", \"short\": true } ] }] }" $OOM_SLACK_URL' ]
+          {{- if .Values.resources.limits.ignite.memory }}
+          resources:
+            limits:
+              memory: "{{ .Values.resources.limits.ignite.memory }}"
+          {{- end }}
+      securityContext:
+        fsGroup: 2000 # try removing this if you have permission issues
+      volumes:
+        - name: config-vol
+          configMap:
+            name: ignite-config
+#        - name: swap-vol
+#          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: work-vol
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        {{- if $.Values.storageClass.name }}
+        storageClassName: {{ $.Values.storageClass.name }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ $.Values.storageClass.ignite_work_size }} # make sure to provide enought space for your application data
+    - metadata:
+        name: wal-vol
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        {{- if $.Values.storageClass.name }}
+        storageClassName: {{ $.Values.storageClass.name }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ $.Values.storageClass.ignite_wal_size }}
+#    - metadata:
+#        name: swap-vol
+#      spec:
+#        accessModes: [ "ReadWriteOnce" ]
+#        {{- if $.Values.storageClass.name }}
+#        storageClassName: {{ $.Values.storageClass.name }}
+#        {{- end }}
+#        resources:
+#          requests:
+#            storage: {{ $.Values.storageClass.ignite_swap_size }}
