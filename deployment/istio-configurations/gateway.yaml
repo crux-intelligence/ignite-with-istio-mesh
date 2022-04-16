@@ -5,7 +5,7 @@ metadata:
   name: backend-gateway
 spec:
   selector:
-    istio: ingressgateway # use istio default controller
+    istio: ingressgateway # use DNS name if deploying on AKS, GKE or EKS. Use * if deploying on local machine using Docker desktop
   servers:
     - port:
         number: 80

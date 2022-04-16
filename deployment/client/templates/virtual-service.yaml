@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   hosts:
-  - "*"
+  - "*" # use DNS name if deploying on AKS, GKE or EKS. Use * if deploying on local machine using Docker desktop
   gateways:
   - default/backend-gateway
   http:

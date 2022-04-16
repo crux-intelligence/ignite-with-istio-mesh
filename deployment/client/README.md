@@ -10,5 +10,5 @@
 3. Deploy Ignite Client using helm chart:
 
  ```shell script
-helm install ignite-client deployment/client -f deployment/client/values.yaml -n istio-system
+helm install ignite-client deployment/client -f deployment/client/values.yaml -n default
 ```
