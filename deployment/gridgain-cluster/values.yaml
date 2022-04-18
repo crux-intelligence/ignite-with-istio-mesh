@@ -1,3 +1,6 @@
+path:
+  gridgain_config_file: "configurations/node-configuration.xml"
+
 storageClass:
   name: gridgain
   ignite_wal_size: 1Gi
@@ -6,6 +9,7 @@ storageClass:
   # type can be aws,gcp,azure or local
   type: local
   local:
+    provisioner: kubernetes.io/no-provisioner
     # update local path as per requirement
     path: /gridgain/data/
   gcp:
