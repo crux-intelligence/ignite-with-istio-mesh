@@ -1,0 +1,14 @@
+#create this in your client application namespace
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: gridgain-client
+  namespace: gridgain
+roleRef:
+  kind: ClusterRole
+  name: view
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    name: gridgain-client-sa
+    namespace: default #client application namespace
