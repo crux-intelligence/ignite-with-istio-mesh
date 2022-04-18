@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gridgain-config
+  namespace: gridgain
+data:
+  node-configuration.xml: {{ .Files.Get .Values.path.gridgain_config_file | indent 4}}

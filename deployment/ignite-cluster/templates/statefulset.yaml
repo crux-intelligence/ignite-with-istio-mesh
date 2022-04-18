@@ -1,0 +1,113 @@
+# An example of a Kubernetes configuration for pod deployment.
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  # Cluster name.
+  name: gridgain-cluster
+  namespace: gridgain
+spec:
+  # The initial number of pods to be started by Kubernetes.
+  replicas: 1
+  serviceName: gridgain
+  selector:
+    matchLabels:
+      app: gridgain
+  template:
+    metadata:
+      labels:
+        app: gridgain
+    spec:
+      serviceAccountName: gridgain
+      terminationGracePeriodSeconds: 60000
+      imagePullSecrets: {}
+      nodeSelector: {}
+      containers:
+        # Custom pod name.
+        - name: gridgain-node
+          image: gridgain/community:8.8.10
+          imagePullPolicy: Always
+          env:
+            - name: OPTION_LIBS
+              value: ignite-kubernetes,ignite-rest-http
+            - name: CONFIG_URI
+              value: file:///gridgain/config/node-configuration.xml
+            - name: JVM_OPTS
+              value: "-DIGNITE_QUIET=false -Xms1g -Xmx1g -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:+ScavengeBeforeFullGC -XX:+DisableExplicitGC"
+            - name: JAVA_OPTS
+              value: "-Djava.net.preferIPv4Stack=true"
+
+          ports:
+            # Ports to open.
+            - containerPort: 47100 # communication SPI port
+            - containerPort: 47500 # discovery SPI port
+            - containerPort: 49112 # JMX port
+            - containerPort: 10800 # thin clients/JDBC driver port
+            - containerPort: 8080 # REST API
+          volumeMounts:
+            - mountPath: /gridgain/config
+              name: config-vol
+            - mountPath: /gridgain/work
+              name: work-vol
+            - mountPath: /gridgain/wal
+              name: wal-vol
+            - mountPath: /gridgain/walarchive
+              name: wal-vol
+#            - mountPath: /gridgain/swapVol
+#              name: swap-vol
+          # UNCOMMENT below for readiness probe.
+          readinessProbe:
+            httpGet:
+              path: /ignite?cmd=probe
+              port: 8080
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            periodSeconds: 60
+            timeoutSeconds: 120
+          # UNCOMMENT below for liveness probe.
+          livenessProbe:
+            httpGet:
+              path: /ignite?cmd=version
+              port: 8080
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            periodSeconds: 60
+            timeoutSeconds: 120
+      securityContext:
+        fsGroup: 2000 # try removing this if you have permission issues
+      volumes:
+        - name: config-vol
+          configMap:
+            name: gridgain-config
+#        - name: swap-vol
+#          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: work-vol
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        {{- if $.Values.storageClass.name }}
+        storageClassName: {{ $.Values.storageClass.name }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ $.Values.storageClass.ignite_work_size }} # make sure to provide enought space for your application data
+    - metadata:
+        name: wal-vol
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        {{- if $.Values.storageClass.name }}
+        storageClassName: {{ $.Values.storageClass.name }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ $.Values.storageClass.ignite_wal_size }}
+#    - metadata:
+#        name: swap-vol
+#      spec:
+#        accessModes: [ "ReadWriteOnce" ]
+#        {{- if $.Values.storageClass.name }}
+#        storageClassName: {{ $.Values.storageClass.name }}
+#        {{- end }}
+#        resources:
+#          requests:
+#            storage: {{ $.Values.storageClass.ignite_swap_size }}
