@@ -8,7 +8,7 @@ metadata:
   labels:
     app: gridgain
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: rest
       port: 8080
@@ -22,5 +22,3 @@ spec:
   selector:
     # Must be equal to the label set for pods.
     app: gridgain
-status:
-  loadBalancer: {}
