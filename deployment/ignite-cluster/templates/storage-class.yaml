@@ -8,9 +8,10 @@ metadata:
   labels:
     addonmanager.kubernetes.io/mode: EnsureExists
 parameters:
+  if()
   {{- range $key, $value := .Values.storageClass.parameters }}
     {{ $key }}: {{ $value | quote }}
-    {{- end }}
+  {{- end }}
 provisioner: {{ .Values.storageClass.provisioner }}
 reclaimPolicy: Delete
 volumeBindingMode: Immediate

@@ -1,26 +1,19 @@
-
 storageClass:
-  type:
-  local:
-    path:
-  gcp:
-    name: gridgain
-    provisioner: kubernetes.io/gce-pd
-    parameters: { type: pd-ssd }
-  aws:
-    name: gridgain
-    provisioner: kubernetes.io/aws-ebs
-    parameters: { type: gp2,fsType: ext4,encrypted: "true",kmsKeyId: "arn:aws:kms:us-east-1:239491595671:key/437b8580-b0fc-45f8-84d5-6943b5af3338" }
-  azure:
-    name: gridgain
-    provisioner: kubernetes.io/azure-disk
-    parameters: { kind: Managed,storageaccounttype: Premium_LRS }
-
+  name: gridgain
   ignite_wal_size: 1Gi
   ignite_work_size: 1Gi
   ignite_swap_size: 1Gi
-
-
-
-
-
+  # type can be aws,gcp,azure or local
+  type: local
+  local:
+    # update local path as per requirement
+    path: /gridgain/data/
+  gcp:
+    provisioner: kubernetes.io/gce-pd
+    parameters: { type: pd-ssd }
+  aws:
+    provisioner: kubernetes.io/aws-ebs
+    parameters: { type: gp2,fsType: ext4 }
+  azure:
+    provisioner: kubernetes.io/azure-disk
+    parameters: { kind: Managed,storageaccounttype: Premium_LRS }
