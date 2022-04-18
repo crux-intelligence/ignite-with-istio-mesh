@@ -1,0 +1,35 @@
+{{- if not (eq $.Values.storageClass.type "aws") -}}
+allowVolumeExpansion: true
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .Values.storageClass.name }}
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
+  labels:
+    addonmanager.kubernetes.io/mode: EnsureExists
+
+{{- if eq $.Values.storageClass.type "local" -}}
+provisioner: {{ .Values.storageClass.type.local.provisioner }}
+{{- if eq $.Values.storageClass.type "aws" -}}
+parameters:
+  {{- range $key, $value := .Values.storageClass.type.aws.parameter }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
+provisioner: {{ .Values.storageClass.type.aws.provisioner }}
+{{- else if eq $.Values.storageClass.type "gcp" -}}
+parameters:
+  {{- range $key, $value := .Values.storageClass.type.gcp.parameter }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}
+provisioner: {{ .Values.storageClass.type.gcp.provisioner }}
+{{- else if eq $.Values.storageClass.type "azure" -}}
+parameters:
+  {{- range $key, $value := .Values.storageClass.type.azure.parameter }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}
+provisioner: {{ .Values.storageClass.type.azure.provisioner }}
+{{- end }}
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+{{- end }}

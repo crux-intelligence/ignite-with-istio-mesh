@@ -52,8 +52,6 @@ spec:
               name: wal-vol
             - mountPath: /gridgain/walarchive
               name: wal-vol
-#            - mountPath: /gridgain/swapVol
-#              name: swap-vol
           # UNCOMMENT below for readiness probe.
           readinessProbe:
             httpGet:
@@ -78,8 +76,6 @@ spec:
         - name: config-vol
           configMap:
             name: gridgain-config
-#        - name: swap-vol
-#          emptyDir: {}
   volumeClaimTemplates:
     - metadata:
         name: work-vol
@@ -101,13 +97,4 @@ spec:
         resources:
           requests:
             storage: {{ $.Values.storageClass.ignite_wal_size }}
-#    - metadata:
-#        name: swap-vol
-#      spec:
-#        accessModes: [ "ReadWriteOnce" ]
-#        {{- if $.Values.storageClass.name }}
-#        storageClassName: {{ $.Values.storageClass.name }}
-#        {{- end }}
-#        resources:
-#          requests:
-#            storage: {{ $.Values.storageClass.ignite_swap_size }}
+
