@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: default
+  name: ignite-client-service
+  labels:
+    run: ignite-client-service
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      name: server-port
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: ignite-client

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="org.apache.ignite.configuration.IgniteConfiguration">
+        <property name="failureDetectionTimeout" value="20000"/>
+        <property name="clientFailureDetectionTimeout" value="30000"/>
+        <property name="peerClassLoadingEnabled" value="true"/>
+        <property name="metricsLogFrequency" value="60000"/>
+        <property name="sqlConfiguration">
+            <bean class="org.apache.ignite.configuration.SqlConfiguration">
+                <property name="sqlOffloadingEnabled" value="true"/>
+            </bean>
+        </property>
+        <property name="workDirectory" value="/gridgain/work"/>
+
+        <property name="dataStorageConfiguration">
+            <bean class="org.apache.ignite.configuration.DataStorageConfiguration">
+                <!-- set the size of wal segments to 128MB -->
+                <property name="walSegmentSize" value="#{128L * 1024 * 1024}"/>
+                <!-- Set the page size to 8 KB -->
+                <property name="pageSize" value="#{8 * 1024}"/>
+                <property name="defaultDataRegionConfiguration">
+                    <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
+                        <property name="name" value="Default_Region"/>
+                        <!-- Memory region of 20 MB initial size. -->
+                        <property name="initialSize" value="#{20L * 1024 * 1024}"/>
+                        <!-- Memory region of 100 MB max size. -->
+                        <property name="maxSize" value="#{100L * 1024 * 1024}"/>
+                        <!-- Enabling eviction for this memory region. -->
+                        <property name="pageEvictionMode" value="RANDOM_2_LRU"/>
+                        <property name="persistenceEnabled" value="true"/>
+                        <!-- Enabling SEGMENTED_LRU page replacement for this region.  -->
+                        <property name="pageReplacementMode" value="SEGMENTED_LRU"/>
+                    </bean>
+                </property>
+                <property name="walPath" value="/gridgain/wal"/>
+                <property name="walArchivePath" value="/gridgain/wal"/>
+            </bean>
+
+        </property>
+
+        <property name="discoverySpi">
+            <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
+                <property name="NetworkTimeout" value="30000"/>
+                <property name="ipFinder">
+                    <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.kubernetes.TcpDiscoveryKubernetesIpFinder">
+                        <property name="namespace" value="gridgain"/>
+                        <property name="serviceName" value="gridgain-service"/>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+
+    </bean>
+</beans>

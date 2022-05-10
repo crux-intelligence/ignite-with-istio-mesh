@@ -1,0 +1,51 @@
+[comment]: <> (**To update and push cache image to cuddle repository**)
+
+[comment]: <> (1. `docker pull gridgain/community:8.8.10`)
+
+[comment]: <> (2. `docker tag gridgain/community:8.8.10 cuddle/cache:8.8.10`)
+
+[comment]: <> (3. `docker push cuddle/cache:8.8.10`)
+
+[comment]: <> (Repository Link: https://hub.docker.com/repository/docker/cuddle/cache)
+
+**Deployment Steps:**
+
+1. Create a namespace
+   `kubectl create namespace gridgain`
+2. Enable Istio
+   `kubectl label ns gridgain istio-injection=enabled`
+3. Helm deployment
+   `helm install gridgain ignite-with-istio/deployment/ignite-cluster -f values.yaml -n gridgain`
+4. Upgrade deployment
+   `helm upgrade gridgain ignite-with-istio/deployment/ignite-cluster -f values.yaml -n gridgain`
+
+**Scaling ignite cluster:**
+
+Scale down: `kubectl scale statefulset.apps/ignite-cluster --replicas=0 -n gridgain`
+
+Scale up: `kubectl scale statefulset.apps/ignite-cluster --replicas=3 -n gridgain`
+
+**Activation of Ignite cluster**
+
+
+Status check: `https://URL/ignite/?cmd=state`
+
+Activate: `https://URL/ignite/?cmd=activate`
+
+
+**To Check logs of ignite-cluster**
+
+Console logs : `kubectl logs -f <pod-name>  -n gridgain`
+
+Detailed logs from inside the pod : 
+1. SSH into the pod/container using `kubectl exec -it <pod-name>  /bin/bash -n gridgain`
+2. Go to `cd /gridgain/work/log`
+3. Do `ls -ltr` and you can see the list of log files
+
+**To check baseline nodes status**
+
+_Note: Check for all  ignite cluster pods_
+1. SSH into the pod/container using `kubectl exec -it <pod-name>  /bin/bash -n gridgain`
+2. Go to `cd /opt/gridgain/bin`
+3. Run `./control.sh --baseline`
+

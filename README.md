@@ -24,3 +24,8 @@ functionality, tuning and patches developed by GridGain to deliver optimal perfo
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## Prerequisite
+
+1. Install minikube or Docker Desktop from https://minikube.sigs.k8s.io/docs/start/ or https://www.docker.com/products/docker-desktop/
+2. Install kubectl CLI from https://kubernetes.io/docs/tasks/tools/
+3. Install helm from https://helm.sh/docs/intro/install/#helm
