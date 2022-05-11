@@ -23,6 +23,8 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <gridgain.version>8.8.10</gridgain.version>
+        <sonar.organization>crux-intelligence</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
     <repositories>
         <repository>
