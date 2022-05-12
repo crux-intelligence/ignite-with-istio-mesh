@@ -27,6 +27,7 @@ import static com.ignite.client.constants.CacheConstant.PLAYER;
 @Slf4j
 public class PlayerService {
   private final CacheManager cacheManager;
+  private final String password = "aaa";
 
   public PlayerService(CacheManager cacheManager) {
     this.cacheManager = cacheManager;
