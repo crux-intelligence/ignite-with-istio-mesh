@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ignite.client</groupId>
     <artifactId>sample-ignite-client</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>sample-ignite-client</name>
     <description>This is a sample client to demonstrate Caching capability of Ignite Cache</description>
