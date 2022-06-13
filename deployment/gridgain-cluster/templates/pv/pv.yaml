@@ -1,0 +1,95 @@
+{{- if eq $.Values.storageClass.type "local" -}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ignite-wal-0-local-pv
+spec:
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: {{ .Values.storageClass.name }}
+  capacity:
+    storage: {{ .Values.storageClass.ignite_wal_size }}
+  accessModes:
+    - ReadWriteOnce
+  local:
+    path: "{{ .Values.storageClass.local.path }}"
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - docker-desktop
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ignite-wal-1-local-pv
+spec:
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: {{ .Values.storageClass.name }}
+  capacity:
+    storage: {{ .Values.storageClass.ignite_wal_size }}
+  accessModes:
+    - ReadWriteOnce
+  local:
+    path: "{{ .Values.storageClass.local.path }}"
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - docker-desktop
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ignite-work-0-local-pv
+spec:
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: {{ .Values.storageClass.name }}
+  capacity:
+    storage: {{ .Values.storageClass.ignite_work_size }}
+  accessModes:
+    - ReadWriteOnce
+  local:
+    path: "{{ .Values.storageClass.local.path }}"
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - docker-desktop
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ignite-work-1-local-pv
+spec:
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: {{ .Values.storageClass.name }}
+  capacity:
+    storage: {{ .Values.storageClass.ignite_work_size }}
+  accessModes:
+    - ReadWriteOnce
+  local:
+    path: "{{ .Values.storageClass.local.path }}"
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - docker-desktop
+{{- end -}}

@@ -29,3 +29,10 @@ functionality, tuning and patches developed by GridGain to deliver optimal perfo
 1. Install minikube or Docker Desktop from https://minikube.sigs.k8s.io/docs/start/ or https://www.docker.com/products/docker-desktop/
 2. Install kubectl CLI from https://kubernetes.io/docs/tasks/tools/
 3. Install helm from https://helm.sh/docs/intro/install/#helm
+
+
+### Steps for Deployment
+1. Install Istio using deployment/istio/README.md
+2. Install Istio configurations using deployment/istio-configurations/README.md
+3. Install Gridgain cluster using deployment/gridgain-cluster/README.md
+4. Install Gridgain client using deployment/client/README.md

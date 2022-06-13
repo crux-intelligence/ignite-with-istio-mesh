@@ -32,9 +32,7 @@ pilot:
   # if protocol sniffing is enabled for inbound
   enableProtocolSniffingForInbound: true
 
-  nodeSelector: {
-    deployType: istio
-  }
+  nodeSelector: {}
   podAnnotations: {}
 
   # You can use jwksResolverExtraRootCA to provide a root certificate

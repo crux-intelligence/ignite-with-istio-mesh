@@ -5,14 +5,13 @@ metadata:
   name: backend-gateway
 spec:
   selector:
-    istio: ingressgateway # use DNS name if deploying on AKS, GKE or EKS. Use * if deploying on local machine using Docker desktop
+    istio: ingressgateway
   servers:
     - port:
         number: 80
         name: http
         protocol: HTTP
       hosts:
-        - "*"
-      tls:
-        httpsRedirect: true
-
+        - "{{ .Values.gateway.hosts }}" # use DNS name if deploying on AKS, GKE or EKS. Use * if deploying on local machine using Docker desktop
+#      tls:
+#        httpsRedirect: true

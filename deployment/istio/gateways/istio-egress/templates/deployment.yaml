@@ -318,9 +318,11 @@ spec:
           name: {{ .configMapName | quote }}
           optional: true
       {{- end }}
+{{- if eq $gateway.affinity "YES" -}}
       affinity:
 {{ include "nodeaffinity" (dict "global" .Values.global "nodeSelector" $gateway.nodeSelector) | trim | indent 8 }}
       {{- include "podAntiAffinity" $gateway | indent 6 }}
+{{- end }}
 {{- if $gateway.tolerations }}
       tolerations:
 {{ toYaml $gateway.tolerations | indent 6 }}

@@ -7,7 +7,7 @@ metadata:
   namespace: gridgain
 spec:
   # The initial number of pods to be started by Kubernetes.
-  replicas: 1
+  replicas: {{ $.Values.replica }}
   serviceName: gridgain
   selector:
     matchLabels:
@@ -19,8 +19,6 @@ spec:
     spec:
       serviceAccountName: gridgain
       terminationGracePeriodSeconds: 60000
-      imagePullSecrets: {}
-      nodeSelector: {}
       containers:
         # Custom pod name.
         - name: gridgain-node

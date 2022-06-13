@@ -1,23 +1,35 @@
 path:
   gridgain_config_file: "configurations/node-configuration.xml"
 
+replica: 1
+
 storageClass:
   name: gridgain
   ignite_wal_size: 1Gi
   ignite_work_size: 1Gi
   ignite_swap_size: 1Gi
-  # type can be aws,gcp,azure or local
-  type: local
+  # type can be local, gcp, azure or aws
+  type: "local"
+  # for local volume use below provisioner and parameters
+  #   provisioner: kubernetes.io/no-provisioner
+  #   parameters: {}
+  # for gcp use below provisioner and parameters
+  #   provisioner: kubernetes.io/gce-pd
+  #   parameters: { type: pd-ssd }
+  # for aws use below provisioner and parameters
+  #   provisioner: kubernetes.io/aws-ebs
+  #   parameters: { type: gp2,fsType: ext4 }
+  # for azure use below provisioner and parameters
+  #   provisioner: kubernetes.io/azure-disk
+  #   parameters: { kind: Managed,storageaccounttype: Premium_LRS }
+  provisioner: kubernetes.io/no-provisioner
+  parameters: {}
+
+
   local:
-    provisioner: kubernetes.io/no-provisioner
     # update local path as per requirement
-    path: /gridgain/data/
-  gcp:
-    provisioner: kubernetes.io/gce-pd
-    parameters: { type: pd-ssd }
-  aws:
-    provisioner: kubernetes.io/aws-ebs
-    parameters: { type: gp2,fsType: ext4 }
-  azure:
-    provisioner: kubernetes.io/azure-disk
-    parameters: { kind: Managed,storageaccounttype: Premium_LRS }
+    path: /ignite-with-istio-mesh/data/
+
+gateway:
+  # use DNS name if deploying on AKS, GKE or EKS. Use * if deploying on local machine using Docker desktop
+  hosts: "*"

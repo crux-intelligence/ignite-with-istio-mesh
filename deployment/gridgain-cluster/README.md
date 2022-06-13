@@ -1,23 +1,14 @@
-[comment]: <> (**To update and push cache image to cuddle repository**)
-
-[comment]: <> (1. `docker pull gridgain/community:8.8.10`)
-
-[comment]: <> (2. `docker tag gridgain/community:8.8.10 cuddle/cache:8.8.10`)
-
-[comment]: <> (3. `docker push cuddle/cache:8.8.10`)
-
-[comment]: <> (Repository Link: https://hub.docker.com/repository/docker/cuddle/cache)
-
 **Deployment Steps:**
 
 1. Create a namespace
    `kubectl create namespace gridgain`
 2. Enable Istio
    `kubectl label ns gridgain istio-injection=enabled`
-3. Helm deployment
-   `helm install gridgain ignite-with-istio/deployment/ignite-cluster -f values.yaml -n gridgain`
-4. Upgrade deployment
-   `helm upgrade gridgain ignite-with-istio/deployment/ignite-cluster -f values.yaml -n gridgain`
+3. Go to ignite-with-istio folder using `cd ignite-with-istio-mesh`   
+4. Helm deployment
+   `helm install gridgain deployment/gridgain-cluster -f deployment/gridgain-cluster/values.yaml -n gridgain`
+5. Upgrade deployment
+   `helm upgrade gridgain deployment/gridgain-cluster -f deployment/gridgain-cluster/values.yaml -n gridgain`
 
 **Scaling ignite cluster:**
 

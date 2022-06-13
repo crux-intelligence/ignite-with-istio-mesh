@@ -11,10 +11,10 @@ spec:
   template:
     metadata:
       labels:
-        app: ignite-client-deployment
+        app: ignite-client
         date: 7thApril2022
     spec:
-      serviceAccountName: ignite-client-sa
+      serviceAccountName: gridgain-client-sa
       containers:
         - name: ignite-client
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}

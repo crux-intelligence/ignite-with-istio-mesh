@@ -84,8 +84,11 @@ gateways:
       # enable cross cluster routing.
       ISTIO_META_ROUTER_MODE: "standard"
 
-    nodeSelector: {deployType: istio}
+    nodeSelector: {}
     tolerations: []
+
+    # set to YES to apply the affinity or set to "NO"
+    affinity: "NO"
 
     # Specify the pod anti-affinity that allows you to constrain which nodes
     # your pod is eligible to be scheduled based on labels on pods that are
