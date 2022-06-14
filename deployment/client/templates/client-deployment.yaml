@@ -19,10 +19,14 @@ spec:
         - name: ignite-client
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+          - name: http
+            containerPort: 9051
+            protocol: TCP
           livenessProbe:
             httpGet:
               path: /manage/health
-              port: 8080
+              port: 9051
             initialDelaySeconds: 30
             periodSeconds: 5
             timeoutSeconds: 60

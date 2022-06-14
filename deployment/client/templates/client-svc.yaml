@@ -10,7 +10,7 @@ spec:
   ports:
     - port: {{ .Values.service.port }}
       name: server-port
-      targetPort: 8080
+      targetPort: 9051
       protocol: TCP
   selector:
     app: ignite-client
