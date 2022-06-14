@@ -5,14 +5,16 @@
    
    `kubectl label ns default istio-injection=enabled `
    
-2. Go to ignite-with-istio folder using `cd ignite-with-istio-mesh`   
+2. Go to ignite-with-istio folder using `cd ignite-with-istio-mesh`  
+
+3. Update deployment/client/values.yaml as per requirement.
    
-3. Deploy Ignite Client using helm chart:
+4. Deploy Ignite Client using helm chart:
 
 ```shell script
     helm install gridgain-client deployment/client -f deployment/client/values.yaml -n default
 ```
-4. Upgrade Ignite Client helm chart:
+5. Upgrade Ignite Client helm chart:
 
 ```shell script
     helm upgrade gridgain-client deployment/client -f deployment/client/values.yaml -n default

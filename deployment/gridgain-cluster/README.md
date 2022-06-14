@@ -5,9 +5,11 @@
 2. Enable Istio
    `kubectl label ns gridgain istio-injection=enabled`
 3. Go to ignite-with-istio folder using `cd ignite-with-istio-mesh`   
-4. Helm deployment
+4. Update path of local directory if your using local storage as volume mount.
+   Update local.path in deployment/gridgain-cluster/values.yaml
+5. Helm deployment
    `helm install gridgain deployment/gridgain-cluster -f deployment/gridgain-cluster/values.yaml -n gridgain`
-5. Upgrade deployment
+6. Upgrade deployment
    `helm upgrade gridgain deployment/gridgain-cluster -f deployment/gridgain-cluster/values.yaml -n gridgain`
 
 **Scaling ignite cluster:**
