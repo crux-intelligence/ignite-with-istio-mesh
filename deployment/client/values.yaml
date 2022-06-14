@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: sample-ignite-client
-  tag: 1.0.0-SNAPSHOT
+  repository: cuddle/sample-ignite-client
+  tag: 1.0.1-SNAPSHOT
   pullPolicy: Always
 
 
