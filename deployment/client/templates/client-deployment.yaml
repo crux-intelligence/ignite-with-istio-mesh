@@ -25,7 +25,7 @@ spec:
             protocol: TCP
           livenessProbe:
             httpGet:
-              path: /manage/health
+              path: /actuator/health
               port: 9051
             initialDelaySeconds: 30
             periodSeconds: 5
